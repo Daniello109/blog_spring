@@ -5,11 +5,13 @@ import com.crudblog.demo.auth.domain.service.JwtTokenService;
 import com.crudblog.demo.auth.domain.service.UserDetailsServiceImpl;
 import com.crudblog.demo.auth.domain.service.UserLoginService;
 import com.crudblog.demo.auth.domain.service.UserRegistrationService;
+import com.crudblog.demo.auth.infrastructure.repository.exception.RegistrationErrorException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -44,12 +46,11 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User userBody) throws Exception {
+    public ResponseEntity<?> register(@RequestBody User userBody) throws RegistrationErrorException {
         try {
             return ResponseEntity.status(201).body(userRegistrationService.UserRegistration(userBody));
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(400).build();
+        } catch (Exception e) {
+            throw new RegistrationErrorException(e.getMessage());
         }
     }
-
 }

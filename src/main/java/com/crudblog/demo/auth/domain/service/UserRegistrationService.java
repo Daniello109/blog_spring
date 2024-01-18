@@ -22,12 +22,12 @@ public class UserRegistrationService {
         this.userMapper = userMapper;
     }
 
-    public UserDTO UserRegistration(User userData) {
+    public UserDTO UserRegistration(User userData) throws Exception {
         userData.setPassword(GenerateHashedPassword(userData.getPassword()));
         try {
             return userMapper.transformUserEntityInUserDto(userRepository.save(userData), true);
         } catch (Exception e) {
-            throw new RuntimeException();
+            throw new Exception(e.getMessage());
         }
     }
 

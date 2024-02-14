@@ -1,13 +1,13 @@
 package com.crudblog.demo.auth.application;
 
+import com.crudblog.demo.auth.domain.entity.Token;
 import com.crudblog.demo.auth.domain.entity.User;
 import com.crudblog.demo.auth.domain.service.JwtTokenService;
 import com.crudblog.demo.auth.domain.service.UserDetailsServiceImpl;
 import com.crudblog.demo.auth.domain.service.UserLoginService;
 import com.crudblog.demo.auth.domain.service.UserRegistrationService;
 import com.crudblog.demo.auth.infrastructure.repository.exception.RegistrationErrorException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,13 +33,23 @@ public class AuthController {
         this.userRegistrationService = userRegistrationService;
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@RequestBody User userBody) throws Exception {
         try {
             userLoginService.login(userBody);
-            String token = jwtTokenService.generateToken(userDetailsService.loadUserByUsername(userBody.getUsername()));
+            Token token = jwtTokenService.generateToken(userDetailsService.loadUserByUsername(userBody.getUsername()));
 
-            return ResponseEntity.ok(token);
+            ResponseCookie jwtCookie = ResponseCookie.from("token", token.getToken())
+                    .httpOnly(true)   // Marquer le cookie comme HttpOnly pour la sécurité
+                    //.secure(true)     // Marquer le cookie comme sécurisé (transmis uniquement via HTTPS)
+                    .path("/")        // Le cookie est accessible pour l'ensemble du domaine
+                    .maxAge(24 * 60 * 60) // Définir la durée de vie du cookie (exemple : 24 heures)
+                    .sameSite("Strict") // Politique SameSite pour le cookie
+                    .build();
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                    .build();
         } catch (BadCredentialsException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

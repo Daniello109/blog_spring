@@ -35,7 +35,7 @@ public class SecurityConfig {
                 )
                 .csrf((csrf) -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // You can disable csrf protection by removing this line
                         .ignoringRequestMatchers("/register", "/login")
-                        .disable()  // Décommentez pour désactiver en entier la protection CSRF en développement
+                        .disable()// Décommentez pour désactiver en entier la protection CSRF en développement
                 )
                 .sessionManagement(session -> session
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)//

@@ -1,5 +1,6 @@
 package com.crudblog.demo.auth.domain.service;
 
+import com.crudblog.demo.auth.domain.entity.Token;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,17 +19,18 @@ public class JwtTokenService {
     private static String secretKey="Juw34WOQg0Rn397En9Ek+LSH4fDEl4QSBGeN1izonY6xA2/sJLVQs2I5vT5ydJxclQUaiLNc2xqlpcodiEnQ5nGiKCXtBbmO6jkpsxBV/h9HgpzmtkSiahnqolPzE0pPEsEQBa2Sow4pLM1yRahGhKoHUBHEykKL8ADJPyJ4n578th4s5vYAaErhBnJ9rVua42RiQLa8avCo6yiKskfAdKegJvdUv/jkZNrXzeIwvjmVQvoUWvtYDgsKP/8RSBkQ5c0snaDQ/Bl7XaPsp/rk1Cy6FW6pb4p6RMyBwVsFxtMEGkM0rxjpUkinIwRxidkk5aeMU8xjx+IH9D5CIAPZzM9GgzbI7WNHMKQKp8iUkC4=";
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
-    public String generateToken(UserDetails userDetails) {
+    public Token generateToken(UserDetails userDetails) {
         Date now = new Date();
-
-        return Jwts.
+        Token token = new Token();
+        token.setToken(Jwts.
                 builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(now.getTime() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact()
-                ;
+        );
+        return token;
     }
 
     private Key getSignInKey() {

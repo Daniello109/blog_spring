@@ -1,4 +1,4 @@
-package com.crudblog.demo.auth.infrastructure.repository.exception;
+package com.crudblog.demo.auth.infrastructure.exception;
 
 public class RegistrationErrorException extends RuntimeException{
     public RegistrationErrorException(String message) {

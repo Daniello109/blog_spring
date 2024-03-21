@@ -2,17 +2,12 @@ package com.crudblog.demo.auth.application;
 
 import com.crudblog.demo.auth.domain.entity.Token;
 import com.crudblog.demo.auth.domain.entity.User;
-import com.crudblog.demo.auth.domain.service.JwtTokenService;
-import com.crudblog.demo.auth.domain.service.UserDetailsServiceImpl;
-import com.crudblog.demo.auth.domain.service.UserLoginService;
-import com.crudblog.demo.auth.domain.service.UserRegistrationService;
-import com.crudblog.demo.auth.infrastructure.repository.exception.RegistrationErrorException;
+import com.crudblog.demo.auth.domain.service.*;
+import com.crudblog.demo.auth.infrastructure.exception.PasswordForgottenErrorException;
+import com.crudblog.demo.auth.infrastructure.exception.RegistrationErrorException;
 import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AuthController {
@@ -20,17 +15,20 @@ public class AuthController {
     private final JwtTokenService jwtTokenService;
     private final UserDetailsServiceImpl userDetailsService;
     private UserRegistrationService userRegistrationService;
+    private PasswordForgottenService passwordForgottenService;
 
     public AuthController(
             UserLoginService userLoginService,
             JwtTokenService jwtTokenService,
             UserDetailsServiceImpl userDetailsService,
-            UserRegistrationService userRegistrationService
+            UserRegistrationService userRegistrationService,
+            PasswordForgottenService passwordForgottenService
     ) {
         this.userLoginService = userLoginService;
         this.jwtTokenService = jwtTokenService;
         this.userDetailsService = userDetailsService;
         this.userRegistrationService = userRegistrationService;
+        this.passwordForgottenService = passwordForgottenService;
     }
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -61,6 +59,26 @@ public class AuthController {
             return ResponseEntity.status(201).body(userRegistrationService.UserRegistration(userBody));
         } catch (Exception e) {
             throw new RegistrationErrorException(e.getMessage());
+        }
+    }
+
+    @PostMapping("/password-forgotten/{email}")
+    public ResponseEntity<?> passwordForgotten(@PathVariable String email) throws RegistrationErrorException {
+        try {
+            return ResponseEntity.status(201).body(passwordForgottenService.tokenGenerator(email));
+        } catch (Exception e) {
+            //throw new PasswordForgottenErrorException(e.getMessage());
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/new-password/{token}")
+    public ResponseEntity<?> newPassword(@PathVariable String token, @RequestBody User userBody) {
+        try {
+            passwordForgottenService.checkTokenValidityAndCreateNewPassword(token, userBody);
+            return ResponseEntity.status(200).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 }

@@ -2,6 +2,8 @@ package com.crudblog.demo.auth.domain.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "`user`")
 public class User {
@@ -32,6 +34,15 @@ public class User {
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role roles;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<PasswordToken> passwordTokens;
+
+    @Transient
+    private String plainPassword;
+
+    @Transient
+    private String plainPasswordVerification;
 
     public Long getId() {
         return id;
@@ -95,5 +106,29 @@ public class User {
 
     public void setRoles(Role roles) {
         this.roles = roles;
+    }
+
+    public List<PasswordToken> getPasswordTokens() {
+        return passwordTokens;
+    }
+
+    public void setPasswordTokens(List<PasswordToken> passwordTokens) {
+        this.passwordTokens = passwordTokens;
+    }
+
+    public String getPlainPassword() {
+        return plainPassword;
+    }
+
+    public void setPlainPassword(String plainPassword) {
+        this.plainPassword = plainPassword;
+    }
+
+    public String getPlainPasswordVerification() {
+        return plainPasswordVerification;
+    }
+
+    public void setPlainPasswordVerification(String plainPasswordVerification) {
+        this.plainPasswordVerification = plainPasswordVerification;
     }
 }

@@ -1,4 +1,4 @@
-package com.crudblog.demo.auth.infrastructure.repository.exception;
+package com.crudblog.demo.auth.infrastructure.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

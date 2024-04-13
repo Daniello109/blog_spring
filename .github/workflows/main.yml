@@ -3,7 +3,7 @@ name: Build and deploy
 on:
   push:
     branches:
-      - main
+      - ci/cd
 jobs:
   build-deploy:
     name: build and deploy tutorial

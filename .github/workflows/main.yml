@@ -8,6 +8,10 @@ jobs:
   build-deploy:
     name: build and deploy tutorial
     runs-on: ubuntu-latest
+    env:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spring_jpa_ci_cd
+      SPRING_DATASOURCE_USERNAME: goyave
+      SPRING_DATASOURCE_PASSWORD: goy@ve1418
     steps:
       - uses: actions/checkout@v4
       - uses: mirromutth/mysql-action@v1.1

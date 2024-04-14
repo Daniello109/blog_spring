@@ -18,7 +18,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql-spring:3306/spring_jpa_ci_cd
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/spring_jpa_ci_cd
       - SPRING_DATASOURCE_USERNAME=goyave
       - SPRING_DATASOURCE_PASSWORD=goy@ve1418
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update

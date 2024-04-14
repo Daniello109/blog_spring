@@ -1,6 +1,7 @@
 package com.crudblog.demo;
 
 import com.crudblog.demo.auth.domain.entity.User;
+import jakarta.servlet.http.Cookie;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class ArticleControllerTest {
 
         MvcResult result = resultActions.andReturn();
 
-        return result.getResponse().getContentAsString();
+        return result.getResponse().getCookie("token").getValue();
     }
 
     @Test
@@ -46,6 +47,7 @@ public class ArticleControllerTest {
                         MockMvcRequestBuilders
                                 .get("/articles")
                                 .header("Authorization", "Bearer " + generateAuthToken())
+                                .cookie(new Cookie("token", generateAuthToken()))
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
         ;

@@ -53,14 +53,13 @@ public class AuthControllerTest {
         jsonUser.put("username", "johndoe");
         jsonUser.put("password", "johndoe");
 
-        MvcResult result = mockMvc
+        mockMvc
                 .perform(MockMvcRequestBuilders.post("/login")
                         .content(jsonUser.toString())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.cookie().exists("token"))
                 .andReturn()
                 ;
-
-        assertNotNull(result.getResponse().getContentType());
     }
 }

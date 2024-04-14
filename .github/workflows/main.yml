@@ -12,11 +12,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
+          distribution: 'corretto'
           java-version: '17'
-          distribution: 'temurin'
-      - name: Run the Maven verify phase
-        run: mvn --batch-mode --update-snapshots verify
 
+      - name: Unit tests
+        run: mvn -B test --file pom.xml
+
+      - name: Build the application
+        run:
+          mvn clean
+          mvn spring-boot:run
 #      - name: checkout code
 #        uses: actions/setup-java@v3
 #        with:

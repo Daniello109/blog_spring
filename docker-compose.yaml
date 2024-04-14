@@ -1,0 +1,34 @@
+version: '3.3'
+services:
+  db-mysql-spring:
+    container_name: db-mysql-spring
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'spring_jpa_ci_cd'
+      MYSQL_USER: 'goyave'
+      MYSQL_PASSWORD: 'goy@ve1418'
+      MYSQL_ROOT_PASSWORD: 'goy@ve1418'
+    ports:
+      - '3307:3306'
+    volumes:
+      - db-mysql-spring:/var/lib/mysql
+  app:
+    image: amazoncorretto:17-alpine
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-mysql-spring:3306/spring_jpa_ci_cd
+      - SPRING_DATASOURCE_USERNAME=goyave
+      - SPRING_DATASOURCE_PASSWORD=goy@ve1418
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - db-mysql-spring
+    volumes:
+      - .:/app
+      - ~/.m2:/root/.m2
+    command: [ "./mvnw", "spring-boot:run" ]
+    working_dir: /app
+
+volumes:
+  db-mysql-spring:

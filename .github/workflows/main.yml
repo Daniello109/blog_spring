@@ -12,9 +12,15 @@ jobs:
       SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3307/spring_jpa_ci_cd
       SPRING_DATASOURCE_USERNAME: goyave
       SPRING_DATASOURCE_PASSWORD: goy@ve1418
+
     steps:
+      - name: Shutdown Ubuntu MySQL (SUDO)
+        run: sudo service mysql stop
+
       - uses: actions/checkout@v4
-      - uses: mirromutth/mysql-action@v1.1
+
+      - name: Set up MySQL
+        uses: mirromutth/mysql-action@v1.1
         with:
           host port: 3307 # Optional, default value is 3306. The port of host
           container port: 3306 # Optional, default value is 3306. The port of container

@@ -15,7 +15,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up MySQL
         uses: mirromutth/mysql-action@v1.1
         with:
@@ -40,9 +39,6 @@ jobs:
       - name: Build the application
         run: mvn -B package --file pom.xml
 
-  docker:
-    runs-on: ubuntu-latest
-    steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -53,8 +49,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push using Docker Compose
-        with:
-          context: .
         run: |
           docker-compose build
           docker-compose push

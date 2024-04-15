@@ -9,9 +9,9 @@ jobs:
     name: build and deploy tutorial
     runs-on: ubuntu-latest
     env:
-      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3307/spring_jpa_ci_cdd
-      SPRING_DATASOURCE_USERNAME: 'goyavee'
-      SPRING_DATASOURCE_PASSWORD: 'goy@ve1418'
+      SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb
+      SPRING_DATASOURCE_USERNAME: 'sa'
+      SPRING_DATASOURCE_PASSWORD: 'password'
 
     steps:
       - name: Shutdown Ubuntu MySQL (SUDO)

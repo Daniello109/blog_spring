@@ -4,6 +4,9 @@ import com.crudblog.demo.article.domain.entity.Article;
 import com.crudblog.demo.article.domain.entity.Comment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,6 +15,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SpringBootTest
+@AutoConfigureMockMvc
+@TestPropertySource(
+        locations = "classpath:application-test.properties"
+)
 public class ArticleTest {
     private Article article;
 

@@ -14,9 +14,6 @@ jobs:
       SPRING_DATASOURCE_PASSWORD: 'password'
 
     steps:
-      - name: Shutdown Ubuntu MySQL (SUDO)
-        run: sudo service mysql stop
-
       - uses: actions/checkout@v4
 
       - name: Set up MySQL

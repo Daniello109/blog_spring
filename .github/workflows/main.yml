@@ -9,8 +9,8 @@ jobs:
     name: build and deploy tutorial
     runs-on: ubuntu-latest
     env:
-      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3307/spring_jpa_ci_cd
-      SPRING_DATASOURCE_USERNAME: 'goyave'
+      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3307/spring_jpa_ci_cdd
+      SPRING_DATASOURCE_USERNAME: 'goyavee'
       SPRING_DATASOURCE_PASSWORD: 'goy@ve1418'
 
     steps:

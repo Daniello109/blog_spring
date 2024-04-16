@@ -1,0 +1,28 @@
+name: Build and deploy
+
+on:
+  push:
+    branches:
+      - docker_ci
+
+jobs:
+  build-deploy:
+      name: build and deploy
+      runs-on: ubuntu-latest
+      env:
+        SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb
+        SPRING_DATASOURCE_USERNAME: 'sa'
+        SPRING_DATASOURCE_PASSWORD: 'password'
+
+      steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-java@v4
+          with:
+            distribution: 'corretto'
+            java-version: '17'
+
+        - name: Unit tests
+          run: mvn -B test --file pom.xml
+
+        - name: Build the application
+          run: mvn -B package --file pom.xml
